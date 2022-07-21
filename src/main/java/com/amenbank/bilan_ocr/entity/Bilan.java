@@ -22,6 +22,10 @@ public class Bilan {
     @Column(name = "year", nullable = false, length = 4)
     private int year;
 
+    @Column(name = "etat", nullable = false, length = 32)
+    @Enumerated(EnumType.STRING)
+    private EtatBilan etat;
+
     // Immobilisation Incorporelles
     @Column(name = "immo_inc", nullable = false)
     private long immoInc;
@@ -185,4 +189,12 @@ public class Bilan {
     // Modifications comptables
     @Column(name = "modif_comptables", nullable = false)
     private long modifComptables;
+
+    public enum EtatBilan {
+        PROVISOIRE,
+        DEFINITIF,
+        AUDITE,
+        DEFINITIVE_APP_PAR_CA,
+        DEFINITIVE_CERTIFIE_CC
+    }
 }
