@@ -22,6 +22,9 @@ public class Bilan {
     @Column(name = "year", nullable = false, length = 4)
     private int year;
 
+    @ManyToOne
+    private User owner;
+
     @Column(name = "etat", nullable = false, length = 32)
     @Enumerated(EnumType.STRING)
     private EtatBilan etat;
