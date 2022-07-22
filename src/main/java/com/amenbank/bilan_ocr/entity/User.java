@@ -1,5 +1,6 @@
 package com.amenbank.bilan_ocr.entity;
 
+import com.amenbank.bilan_ocr.dto.UserRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -32,4 +33,11 @@ public class User {
 
     @ManyToOne
     private Role role;
+
+    public User(UserRequest userRequest) {
+        this.username = userRequest.getUsername();
+        this.password = userRequest.getPassword();
+        this.firstName = userRequest.getFirstName();
+        this.lastName = userRequest.getLastName();
+    }
 }
