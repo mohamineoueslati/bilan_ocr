@@ -1,6 +1,6 @@
 package com.amenbank.bilan_ocr.service;
 
-import com.amenbank.bilan_ocr.dto.BilanUploadDto;
+import com.amenbank.bilan_ocr.dto.BilanDocumentDto;
 import com.amenbank.bilan_ocr.entity.Bilan;
 import com.amenbank.bilan_ocr.exception.NotFoundException;
 import com.amenbank.bilan_ocr.repository.BilanRepository;
@@ -32,7 +32,7 @@ public class BilanService implements IBilanService {
     }
 
     @Override
-    public Bilan save(BilanUploadDto bilanInfo) {
+    public Bilan save(BilanDocumentDto bilanInfo) {
         return null;
     }
 

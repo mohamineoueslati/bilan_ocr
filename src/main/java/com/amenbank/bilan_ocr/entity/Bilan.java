@@ -1,6 +1,7 @@
 package com.amenbank.bilan_ocr.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,13 +9,14 @@ import java.util.Date;
 @Entity
 @Table(name = "bilan")
 @Data
+@NoArgsConstructor
 public class Bilan {
     @Id
     @Column(name = "matricule", length = 64)
     private String matricule;
 
     @Column(name = "created_At", nullable = false)
-    private Date createAt;
+    private Date createdAt;
 
     @Column(name = "rs", nullable = false, length = 64)
     private String rs;

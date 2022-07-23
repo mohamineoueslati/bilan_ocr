@@ -3,11 +3,13 @@ package com.amenbank.bilan_ocr.dto;
 import com.amenbank.bilan_ocr.entity.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class UserResponse extends UserDto {
     private Integer id;
     private Date createdAt;
