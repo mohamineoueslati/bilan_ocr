@@ -11,5 +11,5 @@ import java.util.Date;
 @NoArgsConstructor
 public class BilanResponse extends BilanDto {
     private Date createdAt;
-    private String ownerUsername;
+    private String publisherUsername;
 }

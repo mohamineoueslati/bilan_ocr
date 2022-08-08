@@ -5,11 +5,14 @@ import com.amenbank.bilan_ocr.dto.BilanDto;
 import com.amenbank.bilan_ocr.dto.BilanResponse;
 import com.amenbank.bilan_ocr.entity.Bilan;
 import com.amenbank.bilan_ocr.service.IBilanService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,12 +27,17 @@ public class BilanController {
     }
 
     @GetMapping
-    public List<BilanResponse> getBilans() {
-        var bilans = bilanService.findAll();
+    public ResponseEntity<Map<String, Object>> getBilans(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        var bilansPage = bilanService.findAll(PageRequest.of(page, size));
 
-        return bilans.stream()
+        var bilans = bilansPage.getContent().stream()
                 .map(bilan -> modelMapper.map(bilan, BilanResponse.class))
                 .collect(Collectors.toList());
+
+        return ResponseEntity.ok(Map.of("bilans", bilans, "total", bilansPage.getTotalElements()));
     }
 
     @GetMapping("{matricule}")
@@ -40,7 +48,7 @@ public class BilanController {
     }
 
     @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public BilanResponse uploadBilan(@ModelAttribute BilanDocumentDto bilanInfo) {
+    public BilanResponse uploadBilan(@ModelAttribute BilanDocumentDto bilanInfo) throws JsonProcessingException {
         var bilan = bilanService.save(bilanInfo);
 
         return modelMapper.map(bilan, BilanResponse.class);

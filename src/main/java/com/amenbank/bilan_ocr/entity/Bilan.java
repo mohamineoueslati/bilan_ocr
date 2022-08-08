@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Map;
 
 @Entity
 @Table(name = "bilan")
@@ -25,7 +26,7 @@ public class Bilan {
     private int year;
 
     @ManyToOne
-    private User owner;
+    private User publisher;
 
     @Column(name = "etat", nullable = false, length = 32)
     @Enumerated(EnumType.STRING)
@@ -33,167 +34,171 @@ public class Bilan {
 
     // Immobilisation Incorporelles
     @Column(name = "immo_inc", nullable = false)
-    private long immoInc;
+    private double immoInc;
 
     // Amortissements Immo Inco
     @Column(name = "ammortissements_immo_inco", nullable = false)
-    private long ammortissementsImmoInco;
+    private double ammortissementsImmoInco;
 
     // Immo Corporelles
     @Column(name = "immo_corp", nullable = false)
-    private long immoCorp;
+    private double immoCorp;
 
     // Amortissement imm corporelles
     @Column(name = "ammortissements_immo_corp", nullable = false)
-    private long ammortissementsImmoCorp;
+    private double ammortissementsImmoCorp;
 
     // Immo Financières
     @Column(name = "immo_financieres", nullable = false)
-    private long immoFinancieres;
+    private double immoFinancieres;
 
     // Provisions sur Imm Financières
     @Column(name = "prov_immo_financiere", nullable = false)
-    private long provImmoFinanciere;
+    private double provImmoFinanciere;
 
     // Autres actifs non courant
     @Column(name = "autre_actifs_non_courant", nullable = false)
-    private long autreActifsNonCourant;
+    private double autreActifsNonCourant;
 
     // Stocks
     @Column(name = "stocks", nullable = false)
-    private long stocks;
+    private double stocks;
 
     // Provisions sur stock
     @Column(name = "prov_stocks", nullable = false)
-    private long provStocks;
+    private double provStocks;
 
     // Clients et comptes rattachés
     @Column(name = "clt_compte_rattache", nullable = false)
-    private long cltCompteRattache;
+    private double cltCompteRattache;
 
     // Provisions sur les clients
     @Column(name = "prov_clt", nullable = false)
-    private long provClt;
+    private double provClt;
 
     // Autres actifs courants
     @Column(name = "autre_actifs_courants", nullable = false)
-    private long autreActifsCourants;
+    private double autreActifsCourants;
 
     // Placements et autres actifs financiers
     @Column(name = "placements_autres_actifs_financiers", nullable = false)
-    private long placementsAutresActifsFinanciers;
+    private double placementsAutresActifsFinanciers;
 
     // Liquidités
     @Column(name = "liquidite", nullable = false)
-    private long liquidite;
+    private double liquidite;
 
     // Capital
     @Column(name = "capital", nullable = false)
-    private long capital;
+    private double capital;
 
     // Réserves
     @Column(name = "reserves", nullable = false)
-    private long reserves;
+    private double reserves;
 
     // Autres capitaux propres
     @Column(name = "autres_capitaux_propes", nullable = false)
-    private long autresCapitauxPropes;
+    private double autresCapitauxPropes;
 
     // Résultats reportés
     @Column(name = "resultat_reportes", nullable = false)
-    private long resultatReportes;
+    private double resultatReportes;
 
     // Résultat de l'exercice
     @Column(name = "resultat_exercice", nullable = false)
-    private long resultatExercie;
+    private double resultatExercie;
 
     // Emprunts
     @Column(name = "emprunts", nullable = false)
-    private long emprunts;
+    private double emprunts;
 
     // Autres passifs financiers
     @Column(name = "autres_passifs_financiers", nullable = false)
-    private long autresPassifsFinanciers;
+    private double autresPassifsFinanciers;
 
     // Provisions sur passifs non courants
     @Column(name = "prov_passifs_non_courants", nullable = false)
-    private long provPassifsNonCourants;
+    private double provPassifsNonCourants;
 
     // Fournisseurs
     @Column(name = "fournisseurs", nullable = false)
-    private long fournisseurs;
+    private double fournisseurs;
 
     // Autres passifs courants
     @Column(name = "autres_passifs_courants", nullable = false)
-    private long autresPassifsCourants;
+    private double autresPassifsCourants;
 
     // Concours bancaires
     @Column(name = "concours_bancaires", nullable = false)
-    private long concours_bancaires;
+    private double concours_bancaires;
 
     // Revenus
     @Column(name = "revenus", nullable = false)
-    private long revenus;
+    private double revenus;
 
     // Autres produits
     @Column(name = "autres_produits", nullable = false)
-    private long autresProduits;
+    private double autresProduits;
 
     // Production immobilisée
     @Column(name = "production_immobilisee", nullable = false)
-    private long productionImmobilisee;
+    private double productionImmobilisee;
 
     // Variation de stock
     @Column(name = "variation_stock", nullable = false)
-    private long variationStock;
+    private double variationStock;
 
     // Achat consommé
     @Column(name = "achat_consomme", nullable = false)
-    private long achatConsomme;
+    private double achatConsomme;
 
     // Achat d'approvisionnement
     @Column(name = "achat_approv", nullable = false)
-    private long achatApprov;
+    private double achatApprov;
 
     // Charges de personnel
     @Column(name = "charges_personnel", nullable = false)
-    private long chargesPersonnel;
+    private double chargesPersonnel;
 
     // Dotations aux amortissements
     @Column(name = "dotations_ammort", nullable = false)
-    private long dotationsAmmort;
+    private double dotationsAmmort;
 
     // Autres charges d'exploitation
     @Column(name = "autres_charges_exploit", nullable = false)
-    private long autresChargesExploit;
+    private double autresChargesExploit;
+
+    // Résultat d'exploitation
+    @Column(name = "resultat_exploitation", nullable = false)
+    private double resultatExploitation;
 
     // Charges financière
     @Column(name = "charges_financiere", nullable = false)
-    private long chargesFinanciere;
+    private double chargesFinanciere;
 
     // Produits des placements
     @Column(name = "produits_placements", nullable = false)
-    private long produitsPlacements;
+    private double produitsPlacements;
 
     // Autres gains
     @Column(name = "autres_gains", nullable = false)
-    private long autresGains;
+    private double autresGains;
 
     // Autres pertes
     @Column(name = "autres_pertes", nullable = false)
-    private long autresPertes;
+    private double autresPertes;
 
     // Impôts
     @Column(name = "impots", nullable = false)
-    private long impots;
+    private double impots;
 
     // Eléments Extra
     @Column(name = "elements_extra", nullable = false)
-    private long elementsExtra;
+    private double elementsExtra;
 
     // Modifications comptables
     @Column(name = "modif_comptables", nullable = false)
-    private long modifComptables;
+    private double modifComptables;
 
     public enum EtatBilan {
         PROVISOIRE,
@@ -201,5 +206,50 @@ public class Bilan {
         AUDITE,
         DEFINITIVE_APP_PAR_CA,
         DEFINITIVE_CERTIFIE_CC
+    }
+
+    public Bilan(Map<String, Double> jsonBilan) {
+        this.immoInc = jsonBilan.get("immobilisation_incorporelles");
+        this.ammortissementsImmoInco = jsonBilan.get("amortissements_immo_inco");
+        this.immoCorp = jsonBilan.get("immobilisation_corporelles");
+        this.ammortissementsImmoCorp = jsonBilan.get("amortissement_imm_corporelles");
+        this.immoFinancieres = jsonBilan.get("immo_financieres");
+        this.provImmoFinanciere = jsonBilan.get("provisions_sur_imm_financieres");
+        this.autreActifsNonCourant = jsonBilan.get("autres_actifs_non_courant");
+        this.stocks = jsonBilan.get("stocks");
+        this.provStocks = jsonBilan.get("provisions_sur_stocks");
+        this.cltCompteRattache = jsonBilan.get("clients_et_comptes_rattaches");
+        this.provClt = jsonBilan.get("Provisions_sur_les_clients");
+        this.autreActifsCourants = jsonBilan.get("autres_actifs_courants");
+        this.placementsAutresActifsFinanciers = jsonBilan.get("placement");
+        this.liquidite = jsonBilan.get("Liquidites");
+        this.capital = jsonBilan.get("capital");
+        this.reserves = jsonBilan.get("reserves");
+        this.autresCapitauxPropes = jsonBilan.get("autres_capitaux_propres");
+        this.resultatReportes = jsonBilan.get("resultats_reportes");
+        this.resultatExercie = jsonBilan.get("resultat_exercise");
+        this.emprunts = jsonBilan.get("emprunts");
+        this.autresPassifsFinanciers = jsonBilan.get("autres_passifs_financiers");
+        this.provPassifsNonCourants = jsonBilan.get("Provisions_passifs_non_courants");
+        this.fournisseurs = jsonBilan.get("fournisseurs");
+        this.autresPassifsCourants = jsonBilan.get("autres_passifs_courants");
+        this.concours_bancaires = jsonBilan.get("concours_bancaires");
+        this.revenus = jsonBilan.get("revenus");
+        this.autresProduits = jsonBilan.get("autres_produits");
+        this.productionImmobilisee = jsonBilan.get("production_immobilisee");
+        this.variationStock = jsonBilan.get("variation_stock");
+        this.achatConsomme = jsonBilan.get("achat_consomme");
+        this.achatApprov = jsonBilan.get("achat_approvisionnement");
+        this.chargesPersonnel = jsonBilan.get("charges_personnel");
+        this.dotationsAmmort = jsonBilan.get("dotations_amortissements");
+        this.autresChargesExploit = jsonBilan.get("autres_charges");
+        this.resultatExploitation = jsonBilan.get("resultat_exploitation");
+        this.chargesFinanciere = jsonBilan.get("charges_financiere");
+        this.produitsPlacements = jsonBilan.get("produits_placements");
+        this.autresGains = jsonBilan.get("autres_gains");
+        this.autresPertes = jsonBilan.get("autres_pertes");
+        this.impots = jsonBilan.get("impot");
+        this.elementsExtra = jsonBilan.get("element_extra");
+        this.modifComptables = jsonBilan.get("modifications_comptables");
     }
 }
