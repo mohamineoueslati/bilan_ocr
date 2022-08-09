@@ -59,6 +59,11 @@ public class BilanService implements IBilanService {
 
     @Override
     public Bilan update(Bilan bilan) {
+        var currentBilan = findByMatricule(bilan.getMatricule());
+
+        bilan.setCreatedAt(currentBilan.getCreatedAt());
+        bilan.setPublisher(currentBilan.getPublisher());
+
         return bilanRepository.save(bilan);
     }
 
