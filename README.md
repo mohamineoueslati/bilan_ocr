@@ -7,3 +7,5 @@ Database: We recommend using `oracle database`, otherwise you can choose any dat
 ## Run the project
 
 Use your favorite editor to run the project or you can open the terminal inside the project folder and run `./mvnw spring-boot:run` for windows users and `./mvn spring-boot:run` for `linux or mac` users.
+
+For this to work make sure you set the JAVA_HOME environement variable.
