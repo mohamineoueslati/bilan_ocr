@@ -1,6 +1,6 @@
 package com.amenbank.bilan_ocr.service;
 
-import com.amenbank.bilan_ocr.dto.BilanDocumentDto;
+import com.amenbank.bilan_ocr.dto.bilan.BilanDocumentDto;
 import com.amenbank.bilan_ocr.entity.Bilan;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;

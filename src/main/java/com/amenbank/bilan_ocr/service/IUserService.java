@@ -1,14 +1,14 @@
 package com.amenbank.bilan_ocr.service;
 
 import com.amenbank.bilan_ocr.entity.User;
-import com.amenbank.bilan_ocr.exception.InvalidPasswordException;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IUserService {
-    List<User> findAll();
+    Page<User> findAll(Pageable pageable);
     User findById(Integer id);
-    User save(User user) throws InvalidPasswordException;
+    User save(User user);
+    User update(User user);
     void deleteById(Integer id);
     boolean existsByUsername(String username);
     User findByUsername(String username);

@@ -1,14 +1,17 @@
 package com.amenbank.bilan_ocr.entity;
 
-import com.amenbank.bilan_ocr.dto.UserRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 public class User {
@@ -28,16 +31,14 @@ public class User {
     @Column(name = "last_name", length = 64, nullable = false)
     private String lastName;
 
-    @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDate createdAt;
+
+    @LastModifiedDate
+    @Column(name = "last_modified_at")
+    private LocalDate modifiedAt;
 
     @ManyToOne
     private Role role;
-
-    public User(UserRequest userRequest) {
-        this.username = userRequest.getUsername();
-        this.password = userRequest.getPassword();
-        this.firstName = userRequest.getFirstName();
-        this.lastName = userRequest.getLastName();
-    }
 }

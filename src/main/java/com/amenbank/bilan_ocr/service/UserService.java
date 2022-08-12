@@ -2,14 +2,14 @@ package com.amenbank.bilan_ocr.service;
 
 import com.amenbank.bilan_ocr.entity.User;
 import com.amenbank.bilan_ocr.exception.DuplicatedEntityException;
-import com.amenbank.bilan_ocr.exception.InvalidPasswordException;
 import com.amenbank.bilan_ocr.exception.NotFoundException;
 import com.amenbank.bilan_ocr.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @Transactional
@@ -22,8 +22,8 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override
@@ -34,22 +34,25 @@ public class UserService implements IUserService{
 
     @Override
     public User save(User user) {
-        if (user.getId() == null) {
-            if (existsByUsername(user.getUsername()))
-                throw new DuplicatedEntityException("Found another user with username " + user.getUsername());
-            if (user.getPassword().trim().isBlank()) throw new InvalidPasswordException("Password not valid");
-        } else {
-            var currentUser = findById(user.getId());
-            if (!currentUser.getUsername().equals(user.getUsername())) {
-                if (existsByUsername(user.getUsername()))
-                    throw new DuplicatedEntityException("Found another user with username " + user.getUsername());
-            }
-            if (user.getPassword() != null && !user.getPassword().trim().isBlank()) {
-                user.setPassword(currentUser.getPassword());
-            }
-        }
+        if (existsByUsername(user.getUsername()))
+            throw new DuplicatedEntityException("Found another user with username " + user.getUsername());
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public User update(User user) {
+        var currentUser = findById(user.getId());
+        if (!currentUser.getUsername().equals(user.getUsername()) && existsByUsername(user.getUsername())) {
+            throw new DuplicatedEntityException("Found another user with username " + user.getUsername());
+        }
+
+        currentUser.setUsername(user.getUsername());
+        currentUser.setFirstName(user.getFirstName());
+        currentUser.setLastName(user.getLastName());
+        currentUser.setRole(user.getRole());
+
+        return userRepository.save(currentUser);
     }
 
     @Override

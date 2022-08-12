@@ -1,4 +1,4 @@
-package com.amenbank.bilan_ocr.dto;
+package com.amenbank.bilan_ocr.dto.bilan;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

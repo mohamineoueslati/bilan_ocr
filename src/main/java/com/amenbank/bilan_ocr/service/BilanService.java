@@ -1,7 +1,8 @@
 package com.amenbank.bilan_ocr.service;
 
-import com.amenbank.bilan_ocr.dto.BilanDocumentDto;
+import com.amenbank.bilan_ocr.dto.bilan.BilanDocumentDto;
 import com.amenbank.bilan_ocr.entity.Bilan;
+import com.amenbank.bilan_ocr.exception.DuplicatedEntityException;
 import com.amenbank.bilan_ocr.exception.NotFoundException;
 import com.amenbank.bilan_ocr.repository.BilanRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,7 +19,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +44,9 @@ public class BilanService implements IBilanService {
 
     @Override
     public Bilan save(BilanDocumentDto bilanInfo) throws JsonProcessingException {
+        if (bilanRepository.existsByMatricule(bilanInfo.getMatricule()))
+            throw new DuplicatedEntityException("Bilan with matricule " + bilanInfo.getMatricule() + " already exists");
+
         var jsonResult = extractBilanValues(bilanInfo.getDocument().getResource());
         Map<String, Double> jsonBilan = new ObjectMapper().readValue(jsonResult, HashMap.class);
 
@@ -52,7 +55,6 @@ public class BilanService implements IBilanService {
         bilan.setRs(bilanInfo.getRs());
         bilan.setYear(bilanInfo.getYear());
         bilan.setEtat(bilanInfo.getEtat());
-        bilan.setCreatedAt(new Date());
 
         return bilanRepository.save(bilan);
     }
@@ -60,6 +62,10 @@ public class BilanService implements IBilanService {
     @Override
     public Bilan update(Bilan bilan) {
         var currentBilan = findByMatricule(bilan.getMatricule());
+
+        if (!currentBilan.getMatricule().equals(bilan.getMatricule()) && bilanRepository.existsByMatricule(bilan.getMatricule())) {
+            throw new DuplicatedEntityException("Bilan with matricule " + bilan.getMatricule() + " already exists");
+        }
 
         bilan.setCreatedAt(currentBilan.getCreatedAt());
         bilan.setPublisher(currentBilan.getPublisher());

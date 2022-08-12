@@ -2,13 +2,19 @@ package com.amenbank.bilan_ocr.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 @Entity
 @Table(name = "bilan")
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @NoArgsConstructor
 public class Bilan {
@@ -16,8 +22,13 @@ public class Bilan {
     @Column(name = "matricule", length = 64)
     private String matricule;
 
-    @Column(name = "created_At", nullable = false)
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreatedDate
+    private LocalDate createdAt;
+
+    @Column(name = "last_modified_at", nullable = false)
+    @LastModifiedDate
+    private LocalDate lastModifiedAt;
 
     @Column(name = "rs", nullable = false, length = 64)
     private String rs;
@@ -25,8 +36,13 @@ public class Bilan {
     @Column(name = "year", nullable = false, length = 4)
     private int year;
 
-    @ManyToOne
-    private User publisher;
+    @Column(name = "created_by")
+    @CreatedBy
+    private String publisher;
+
+    @Column(name = "last_modified_by")
+    @LastModifiedBy
+    private String modifier;
 
     @Column(name = "etat", nullable = false, length = 32)
     @Enumerated(EnumType.STRING)

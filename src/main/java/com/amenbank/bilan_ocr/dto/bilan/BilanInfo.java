@@ -1,4 +1,4 @@
-package com.amenbank.bilan_ocr.dto;
+package com.amenbank.bilan_ocr.dto.bilan;
 
 import com.amenbank.bilan_ocr.entity.Bilan;
 import lombok.Data;

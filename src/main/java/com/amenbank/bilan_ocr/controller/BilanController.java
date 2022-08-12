@@ -1,8 +1,9 @@
 package com.amenbank.bilan_ocr.controller;
 
-import com.amenbank.bilan_ocr.dto.BilanDocumentDto;
-import com.amenbank.bilan_ocr.dto.BilanDto;
-import com.amenbank.bilan_ocr.dto.BilanResponse;
+import com.amenbank.bilan_ocr.dto.bilan.BilanDocumentDto;
+import com.amenbank.bilan_ocr.dto.bilan.BilanDto;
+import com.amenbank.bilan_ocr.dto.bilan.BilanResponse;
+import com.amenbank.bilan_ocr.dto.page.PageDto;
 import com.amenbank.bilan_ocr.entity.Bilan;
 import com.amenbank.bilan_ocr.service.IBilanService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,7 +27,7 @@ public class BilanController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getBilans(
+    public ResponseEntity<PageDto<BilanResponse>> getBilans(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
@@ -37,7 +37,9 @@ public class BilanController {
                 .map(bilan -> modelMapper.map(bilan, BilanResponse.class))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(Map.of("bilans", bilans, "total", bilansPage.getTotalElements()));
+        var pageData = new PageDto<>(bilansPage.getTotalElements(), bilans);
+
+        return ResponseEntity.ok(pageData);
     }
 
     @GetMapping("{matricule}")

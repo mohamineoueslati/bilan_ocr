@@ -1,4 +1,4 @@
-package com.amenbank.bilan_ocr.dto;
+package com.amenbank.bilan_ocr.dto.user;
 
 import lombok.Data;
 
