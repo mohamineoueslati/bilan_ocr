@@ -50,7 +50,7 @@ public class ControllerExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRestClientException(RestClientException e) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.SERVICE_UNAVAILABLE.value(),
-                "Bilan ocr service is unavailable"
+                "Bilan ocr service unavailable"
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
     }

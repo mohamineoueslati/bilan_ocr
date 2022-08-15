@@ -1,31 +1,29 @@
 package com.amenbank.bilan_ocr.filter;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import com.amenbank.bilan_ocr.dto.auth.AuthenticatedUser;
+import com.amenbank.bilan_ocr.util.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class UsernamePasswordAuthFilter extends UsernamePasswordAuthenticationFilter {
-    private final AuthenticationManager authenticationManager;
-    private final String signingKey = "ymLTU8rq83j4fmJZj60wh4OrMNuntIj4fmJ";
-    private final SecretKey key = Keys.hmacShaKeyFor(signingKey.getBytes(StandardCharsets.UTF_8));
+    private final JwtUtil jwtUtil;
 
-    public UsernamePasswordAuthFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
+    public UsernamePasswordAuthFilter(String signingKey, AuthenticationManager authenticationManager) {
+        super(authenticationManager);
+        this.jwtUtil = new JwtUtil(signingKey);
     }
 
     @Override
@@ -39,30 +37,42 @@ public class UsernamePasswordAuthFilter extends UsernamePasswordAuthenticationFi
                     password
             );
 
-            return authenticationManager.authenticate(auth);
+            auth.setDetails(this.authenticationDetailsSource.buildDetails(request));
+            return getAuthenticationManager().authenticate(auth);
         } else {
             throw new AuthenticationCredentialsNotFoundException("Username and password are required to authenticate");
         }
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         var username = authResult.getName();
         var authorities = authResult.getAuthorities();
+        var role =
+                authorities.stream().findFirst().isPresent() ?
+                authorities.stream().findFirst().get().getAuthority() : "";
 
-        var token = Jwts.builder()
-                .setSubject(username)
-                .addClaims(Map.of("role", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())))
-                .setExpiration(new Date(System.currentTimeMillis() + 5 * 60 * 1000))
-                .setIssuer(request.getRequestURI())
-                .signWith(key)
-                .compact();
+        var expiresIn = 24 * 60 * 60; // Number of seconds until the token expires
+        var expirationDate = new Date(System.currentTimeMillis() + expiresIn * 1000);
+        var token = jwtUtil.generateToken(
+                username,
+                Map.of(
+                        "role",
+                        role
+                ),
+                request.getRequestURI(),
+                expirationDate
+        );
 
-        response.setHeader("Authorization", token);
-    }
+        var authUser = new AuthenticatedUser(
+                username,
+                role,
+                token,
+                expiresIn
+        );
 
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), authUser);
     }
 }
