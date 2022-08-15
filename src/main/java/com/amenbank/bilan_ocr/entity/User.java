@@ -36,9 +36,11 @@ public class User {
     private LocalDate createdAt;
 
     @LastModifiedDate
-    @Column(name = "last_modified_at")
+    @Column(name = "last_modified_at", nullable = false)
     private LocalDate modifiedAt;
 
     @ManyToOne
     private Role role;
+
+    private boolean enabled;
 }

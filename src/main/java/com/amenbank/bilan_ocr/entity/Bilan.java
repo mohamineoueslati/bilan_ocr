@@ -36,11 +36,11 @@ public class Bilan {
     @Column(name = "year", nullable = false, length = 4)
     private int year;
 
-    @Column(name = "created_by")
+    @Column(name = "created_by", nullable = false, updatable = false)
     @CreatedBy
     private String publisher;
 
-    @Column(name = "last_modified_by")
+    @Column(name = "last_modified_by", nullable = false)
     @LastModifiedBy
     private String modifier;
 

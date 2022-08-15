@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.stream.Collectors;
 
 @RestController
@@ -52,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse saveUser(@RequestBody UserRequest userRequest) {
+    public UserResponse saveUser(@Valid @RequestBody UserRequest userRequest) {
         var role = fetchRole(userRequest.getRole());
         var user = modelMapper.map(userRequest, User.class);
         user.setRole(role);

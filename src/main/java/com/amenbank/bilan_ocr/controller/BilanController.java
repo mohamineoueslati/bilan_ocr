@@ -49,7 +49,7 @@ public class BilanController {
         return modelMapper.map(bilan, BilanResponse.class);
     }
 
-    @PostMapping(value = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public BilanResponse uploadBilan(@ModelAttribute BilanDocumentDto bilanInfo) throws JsonProcessingException {
         var bilan = bilanService.save(bilanInfo);
 
