@@ -28,7 +28,7 @@ public class AuthProvider implements AuthenticationProvider {
 
         var user = appUserDetailsService.loadUserByUsername(username);
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (passwordEncoder.matches(password, user.getPassword()) && user.isEnabled()) {
             return new UsernamePasswordAuthenticationToken(
                     user.getUsername(),
                     user.getPassword(),

@@ -12,4 +12,5 @@ public interface IUserService {
     void deleteById(Integer id);
     boolean existsByUsername(String username);
     User findByUsername(String username);
+    User changePassword(Integer id, String password);
 }

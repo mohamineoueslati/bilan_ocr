@@ -71,6 +71,11 @@ public class UserController {
         return modelMapper.map(userService.update(user), UserResponse.class);
     }
 
+    @PutMapping("/change-password/{id}")
+    public UserResponse changePassword(@PathVariable Integer id, @RequestBody() String password) {
+        return modelMapper.map(userService.changePassword(id, password), UserResponse.class);
+    }
+
     @DeleteMapping("{id}")
     public void deleteUser(@PathVariable Integer id) {
         userService.deleteById(id);

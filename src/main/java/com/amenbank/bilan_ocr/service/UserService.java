@@ -48,6 +48,7 @@ public class UserService implements IUserService{
     @Override
     public User update(User user) {
         var currentUser = findById(user.getId());
+
         if (!currentUser.getUsername().equals(user.getUsername()) && existsByUsername(user.getUsername())) {
             throw new DuplicatedEntityException("Found another user with username " + user.getUsername());
         }
@@ -56,6 +57,7 @@ public class UserService implements IUserService{
         currentUser.setFirstName(user.getFirstName());
         currentUser.setLastName(user.getLastName());
         currentUser.setRole(user.getRole());
+        currentUser.setEnabled(user.isEnabled());
 
         return userRepository.save(currentUser);
     }
@@ -74,5 +76,14 @@ public class UserService implements IUserService{
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("User with username " + username + " not found"));
+    }
+
+    @Override
+    public User changePassword(Integer id, String password) {
+        var user = findById(id);
+
+        user.setPassword(passwordEncoder.encode(password));
+
+        return userRepository.save(user);
     }
 }

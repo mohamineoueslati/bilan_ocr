@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/swagger/**").permitAll();
         http.authorizeRequests().antMatchers("/api/users/**").hasAuthority("ADMIN");
         http.authorizeRequests().antMatchers("/api/bilans/**").authenticated();
+        http.authorizeRequests().antMatchers("/api/roles/**").authenticated();
     }
 
     private UsernamePasswordAuthFilter usernamePasswordAuthFilter() throws Exception {
