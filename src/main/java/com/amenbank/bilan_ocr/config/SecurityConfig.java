@@ -11,17 +11,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
     @Value("${jwt.secret.key}")
     private String signingKey;
 
     @Autowired
-    public SecurityConfig(AuthenticationProvider authenticationProvider) {
+    public SecurityConfig(AuthenticationProvider authenticationProvider, AuthenticationEntryPoint authenticationEntryPoint) {
         this.authenticationProvider = authenticationProvider;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Override
@@ -35,14 +38,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterAt(usernamePasswordAuthFilter(), BasicAuthenticationFilter.class);
-        http.addFilterAfter(jwtAuthFilter(), BasicAuthenticationFilter.class);
+        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 
-        http.authorizeRequests().antMatchers("/login/**").permitAll();
-        http.authorizeRequests().antMatchers("/swagger/**").permitAll();
-        http.authorizeRequests().antMatchers("/api/users/**").hasAuthority("ADMIN");
-        http.authorizeRequests().antMatchers("/api/bilans/**").authenticated();
-        http.authorizeRequests().antMatchers("/api/roles/**").authenticated();
+        http.addFilterAt(usernamePasswordAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.authorizeRequests()
+                .antMatchers("/login", "/swagger/**").permitAll()
+                .antMatchers("/api/users/**").hasAuthority("ADMIN")
+                .antMatchers("/api/bilans/**", "/api/roles/**").authenticated();
     }
 
     private UsernamePasswordAuthFilter usernamePasswordAuthFilter() throws Exception {
