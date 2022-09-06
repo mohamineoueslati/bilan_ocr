@@ -2,7 +2,7 @@
 
 You need jdk 11 installed on your machine.
 
-Database: We recommend using `oracle database`, otherwise you can choose any database you want and change the connection settings in the `application.properties`.
+Database: We recommend using `mysql database`, otherwise you can choose any database you want and change the connection settings in the `application.properties`.
 
 ## Run the project
 
